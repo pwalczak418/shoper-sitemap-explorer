@@ -47,6 +47,7 @@ class Validator():
             return True
         elif status == 200:
             print("Nie znaleziono sklepu Shoper pod podanym adresem")
+            return False
         else:
             print(f"Program nie mógł się połączyć z adresem: {url}. Otrzymany status HTTP: {status}")
             return False

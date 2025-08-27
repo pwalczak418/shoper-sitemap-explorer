@@ -1,4 +1,4 @@
-# Shoper Sitemap Explorer v 0.1
+# Shoper Sitemap Explorer v 0.1.1
 
 This program is used to quickly download the Sitemap from stores on the Shoper.pl platform, including both the main file and sub-sitemaps. (as of this version only main file)
 
@@ -8,8 +8,8 @@ Download the program code and run the main.py file in a Python environment.
 
 ## Requirements
 
-requests
-wxPython
+* requests
+* wxPython
 
 ## Features
 

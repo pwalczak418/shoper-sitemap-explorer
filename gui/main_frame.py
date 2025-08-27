@@ -201,10 +201,7 @@ class MainFrame(wx.Frame):
         validator = Validator()
         validated_url = validator.validate_url(url)
 
-        if validated_url:
-            if validator.connect(validated_url):
-                return validated_url
-            else:
-                return False
+        if validated_url and validator.connect(validated_url):
+            return validated_url
         else:
             return False
