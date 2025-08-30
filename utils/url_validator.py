@@ -39,7 +39,11 @@ class Validator():
         except:
             print(f"Nie odnaleziono podanej strony: {url}.")
             return False
-        response_headers = response.headers
+        if response and response.headers is not None:
+            response_headers = response.headers
+        else:
+            print(f"Nie udało się nawiązać połączenia: {url}")
+            return False
         status = response.status_code
         
         if "DCSaaS" in response_headers.values() and status == 200:

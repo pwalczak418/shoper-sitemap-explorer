@@ -9,6 +9,7 @@ class MainFrame(wx.Frame):
         super().__init__(parent=None, title=title, size=(800,500))
 
         self.downloader = SitemapDownloader()
+        self.savedialog = SaveDialog()
 
         self.set_icon()
 
@@ -140,8 +141,8 @@ class MainFrame(wx.Frame):
         self.url_text.SetFocus()
     
     def on_mainsitemap_download(self, event):
-        savedialog = SaveDialog()
-        returned_path = savedialog.save_file_dialog()
+        
+        returned_path = self.savedialog.save_file_dialog()
         if not returned_path:
             wx.MessageBox("Anulowano.", "Błąd", wx.OK | wx.ICON_ERROR)
             return
@@ -157,10 +158,17 @@ class MainFrame(wx.Frame):
             wx.MessageBox("Proszę wybrać co najmniej jedną opcję.", "Błąd", wx.OK | wx.ICON_ERROR)
             return
         
-        url = self.url_text.GetValue()
         selected_str = ", ".join(selected)
         print(f"Wybrano następujące podmapy: {selected_str}")
         wx.MessageBox("Ta funkcja zostanie wkrótce zaimplementowana", "Błąd", wx.OK | wx.ICON_ERROR)
+
+        returned_path = self.savedialog.choose_folder_dialog()
+        if not returned_path:
+            wx.MessageBox("Anulowano.", "Błąd", wx.OK | wx.ICON_ERROR)
+            return
+
+        self.downloader.download_childsitemaps(self.url, returned_path, selected)
+
         return
     
     def on_off_all(self, event):

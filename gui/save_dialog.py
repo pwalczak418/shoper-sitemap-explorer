@@ -22,7 +22,7 @@ class SaveDialog:
             style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST) as dirDialog:
             
             if dirDialog.ShowModal() == wx.ID_OK:
-                # Returning choseon folder path
+                # Returning chosen folder path
                 return dirDialog.GetPath()
             else:
                 return None

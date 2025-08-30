@@ -1,4 +1,4 @@
-# Shoper Sitemap Explorer v 0.1.1
+# Shoper Sitemap Explorer v 0.1.2
 
 This program is used to quickly download the Sitemap from stores on the Shoper.pl platform, including both the main file and sub-sitemaps. (as of this version only main file)
 
