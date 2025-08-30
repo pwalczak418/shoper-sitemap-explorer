@@ -160,17 +160,16 @@ class MainFrame(wx.Frame):
         
         selected_str = ", ".join(selected)
         print(f"Wybrano następujące podmapy: {selected_str}")
-        wx.MessageBox("Ta funkcja zostanie wkrótce zaimplementowana", "Błąd", wx.OK | wx.ICON_ERROR)
 
         returned_path = self.savedialog.choose_folder_dialog()
         if not returned_path:
             wx.MessageBox("Anulowano.", "Błąd", wx.OK | wx.ICON_ERROR)
             return
-
+        
         self.downloader.download_childsitemaps(self.url, returned_path, selected)
-
         return
-    
+
+
     def on_off_all(self, event):
         all_selected = all(checkbox.GetValue() for checkbox in self.checkboxes.values())
         

@@ -14,7 +14,7 @@ class AboutDialog(wx.Dialog):
         title_font.SetWeight(wx.FONTWEIGHT_BOLD)
         title.SetFont(title_font)
         
-        info_text = """Wersja: 0.1.2
+        info_text = """Wersja: 0.1.3
         
 Program służy do szybkiego pobierania Sitemap ze sklepów Shoper.
 Umożliwia pobieranie na dysk głównej sitemapy oraz wybranych kategorii podsitemap.

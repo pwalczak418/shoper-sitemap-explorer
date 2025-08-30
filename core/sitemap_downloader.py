@@ -24,27 +24,28 @@ class SitemapDownloader():
             return False
         
     def download_single_child(self, singlelink, childmap_iteration, trans, index, save_path):
-
         childmap_iteration = childmap_iteration.replace("GoogleSitemap/list/", "")
 
-        ## TO DO ##
+        file_name = trans + "_" + childmap_iteration + "_" + str(index) + ".xml"
+        child_path = os.path.join(save_path, file_name)
 
         try:
-            response = self.requester.get()
+            response = self.requester.get(singlelink)
             print(response.status_code)
         except:
             return False
 
         try:
-            with open(save_path, "w") as file:
+            with open(child_path, "w") as file:
                 file.write(response.text)
+                print("Plik został poprawnie zapisany")
             return True
         except:
+            print("Nie udało się poprawnie zapisać pliku")
             return False
         
     def download_childsitemaps(self, url, save_path, selected_childs):
-        print("Rozpoczynamy pobieranie podsitemap")
-        print(f"url: {url}, save_path: {save_path}, childs: {selected_childs}")
+        print("Rozpoczynam pobieranie podsitemap...")
 
         main_save_path = os.path.join(save_path, "sitemap.xml")
         try:
@@ -67,8 +68,6 @@ class SitemapDownloader():
             if i in sitemaps_url:
                 selected_urls.append(sitemaps_url[i])
 
-        print(selected_urls)
-
         try:
             xml_tree = ET.parse(main_save_path)
             xml_root = xml_tree.getroot()
@@ -81,8 +80,6 @@ class SitemapDownloader():
         except Exception as e:
             print("Wystąpił błąd z odczytaniem Sitemap")
             return False
-        
-        print(links)
 
         for index, singlelink in enumerate(links, start=1):
             for singlechildmap in selected_urls:
@@ -90,10 +87,8 @@ class SitemapDownloader():
                     trans_pattern = re.compile(r'\b[a-z]{2}_[A-Z]{2}\b')
                     trans_found = trans_pattern.search(singlelink)
                     trans = trans_found.group(0)
-                    print(trans)
                     singlechildmap_iteration = singlechildmap
-                    print("singlechild:", singlelink)
-                    print("current index", index)
                     self.download_single_child(singlelink, singlechildmap_iteration, trans, index, save_path)
+                    time.sleep(1)
             
         print("Zakończono")

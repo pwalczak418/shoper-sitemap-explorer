@@ -7,7 +7,6 @@ class Requester():
         self.session.headers.update({"User-agent": "SSE"})
 
     def get(self, url):
-
         attempts_limit = 3
 
         for attempt in range(attempts_limit):
