@@ -4,7 +4,7 @@ import time
 class Requester():
     def __init__(self):
         self.session = requests.Session()
-        self.session.headers.update({"User-agent": "SSE"})
+        self.session.headers.update({"User-agent": "shoper-sitemap-explorer/1.0 (+https://github.com/pwalczak418/shoper-sitemap-explorer)"})
 
     def get(self, url):
         attempts_limit = 3

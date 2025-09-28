@@ -3,6 +3,7 @@ from utils.url_validator import Validator
 from gui.about_window import AboutDialog
 from gui.save_dialog import SaveDialog
 from core.sitemap_downloader import SitemapDownloader
+import threading
 
 class MainFrame(wx.Frame):
     def __init__(self, title="Shoper Sitemap Explorer"):
@@ -166,9 +167,18 @@ class MainFrame(wx.Frame):
             wx.MessageBox("Anulowano.", "Błąd", wx.OK | wx.ICON_ERROR)
             return
         
-        self.downloader.download_childsitemaps(self.url, returned_path, selected)
-        return
+        def childsitemap_download():
+            self.downloader.download_childsitemaps(self.url, returned_path, selected)
+            wx.CallAfter(self.on_childsitemap_download_finished)
 
+        download_thread = threading.Thread(target=childsitemap_download)
+        download_thread.start()
+
+        wx.MessageBox("Pobieranie rozpoczęło się w tle.", "Informacja", wx.OK | wx.ICON_INFORMATION)
+
+    def on_childsitemap_download_finished(self):
+        wx.MessageBox("Pobieranie zakończone.",
+                    "Informacja", wx.OK | wx.ICON_INFORMATION)
 
     def on_off_all(self, event):
         all_selected = all(checkbox.GetValue() for checkbox in self.checkboxes.values())
