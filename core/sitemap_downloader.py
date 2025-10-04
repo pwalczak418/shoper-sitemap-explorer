@@ -44,8 +44,8 @@ class SitemapDownloader():
             print("Nie udało się poprawnie zapisać pliku")
             return False
         
-    def download_childsitemaps(self, url, save_path, selected_childs):
-        print("Rozpoczynam pobieranie podsitemap...")
+    def download_childsitemaps(self, url, save_path, selected_childs, log):
+        log("Rozpoczynam pobieranie...")
 
         main_save_path = os.path.join(save_path, "sitemap.xml")
         try:
@@ -78,17 +78,18 @@ class SitemapDownloader():
                         link = loc_element.text
                         links.append(link)
         except Exception as e:
-            print("Wystąpił błąd z odczytaniem Sitemap")
+            log("Wystąpił błąd z odczytaniem mapy.")
             return False
 
         for index, singlelink in enumerate(links, start=1):
-            for singlechildmap in selected_urls:
+            for singlechildmap in selected_urls:        
                 if singlechildmap in singlelink:
                     trans_pattern = re.compile(r'\b[a-z]{2}_[A-Z]{2}\b')
                     trans_found = trans_pattern.search(singlelink)
                     trans = trans_found.group(0)
                     singlechildmap_iteration = singlechildmap
                     self.download_single_child(singlelink, singlechildmap_iteration, trans, index, save_path)
+                    log(f"Przetworzono link {singlelink}")
                     time.sleep(1)
             
-        print("Zakończono")
+        log("Zakończono pracę")

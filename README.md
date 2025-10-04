@@ -1,4 +1,4 @@
-# Shoper Sitemap Explorer v 1.0
+# Shoper Sitemap Explorer v 1.01
 
 This program is used to quickly download the Sitemap from stores on the Shoper.pl platform, including both the main file and sub-sitemaps.
 
@@ -24,3 +24,9 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Contact
 
 Feel free to contact me through [my website](https://pwalczak.net).
+
+## Changelog
+
+# v 1.01
+
+Added a log box

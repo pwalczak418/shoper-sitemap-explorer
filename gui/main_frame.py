@@ -7,7 +7,7 @@ import threading
 
 class MainFrame(wx.Frame):
     def __init__(self, title="Shoper Sitemap Explorer"):
-        super().__init__(parent=None, title=title, size=(800,500))
+        super().__init__(parent=None, title=title, size=(800,600))
 
         self.downloader = SitemapDownloader()
         self.savedialog = SaveDialog()
@@ -83,6 +83,18 @@ class MainFrame(wx.Frame):
 
         main_sizer.Add(url_sizer, 0, wx.ALL | wx.EXPAND, 10)
         main_sizer.Add(sitemap_sizer, 1, wx.ALL | wx.EXPAND, 10)
+
+        log_box = wx.StaticBox(main_panel, label="Logi")
+        log_sizer = wx.StaticBoxSizer(log_box, wx.VERTICAL)
+
+        self.log_text = wx.TextCtrl(
+            main_panel,
+            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2 | wx.TE_WORDWRAP
+        )
+
+        log_sizer.Add(self.log_text, 1, wx.ALL | wx.EXPAND, 5)
+        main_sizer.Add(log_sizer, 1, wx.ALL | wx.EXPAND, 10)
+
         main_sizer.Add(bottom_sizer, 0, wx.ALL | wx.EXPAND, 5)
         
         main_panel.SetSizer(main_sizer)
@@ -100,7 +112,6 @@ class MainFrame(wx.Frame):
         
         for checkbox in self.checkboxes.values():
             checkbox.Bind(wx.EVT_CHECKBOX, self.on_checkbox_change)
-        
 
         self.Center()
         self.Show()
@@ -168,17 +179,20 @@ class MainFrame(wx.Frame):
             return
         
         def childsitemap_download():
-            self.downloader.download_childsitemaps(self.url, returned_path, selected)
+            self.downloader.download_childsitemaps(self.url, returned_path, selected, self.log)
             wx.CallAfter(self.on_childsitemap_download_finished)
 
         download_thread = threading.Thread(target=childsitemap_download)
         download_thread.start()
 
-        wx.MessageBox("Pobieranie rozpoczęło się w tle.", "Informacja", wx.OK | wx.ICON_INFORMATION)
+        wx.MessageBox("Rozpoczynam pobieranie.", "Informacja", wx.OK | wx.ICON_INFORMATION)
 
     def on_childsitemap_download_finished(self):
         wx.MessageBox("Pobieranie zakończone.",
                     "Informacja", wx.OK | wx.ICON_INFORMATION)
+    
+    def log(self, text):
+        self.log_text.AppendText(f"{text}" + "\n")
 
     def on_off_all(self, event):
         all_selected = all(checkbox.GetValue() for checkbox in self.checkboxes.values())
