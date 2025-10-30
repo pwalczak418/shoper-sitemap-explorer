@@ -2,15 +2,15 @@ from urllib.parse import urlparse
 from core.requester import Requester
 
 class Validator():
-    def __init__(self):
-        pass
+    def __init__(self, log):
+        self.log = log
 
     def validate_url(self, url):
-        print(f"Podano URL: {url}")
+        self.log(f"Podano URL: {url}")
         try:
             result = urlparse(url)
         except AttributeError:
-            print("Nie udało się sparsować podanego URL")
+            self.log("ERROR: Nie udało się sparsować podanego URL")
             return False
         
         print(result.scheme)
@@ -24,34 +24,34 @@ class Validator():
             url = url[:-1]
 
         if not all([result.netloc, '.' in result.netloc]):
-            print("Nie podano prawidłowego URL")
+            self.log("ERROR: Nie podano prawidłowego URL")
             return False
         else:
-            print("Struktura URL prawidłowa.")
+            self.log("Struktura URL prawidłowa.")
             return url
 
     def connect(self, url):
 
         self.requester = Requester()
-        print(f"Rozpoczynam próbę połączenia z {url}")
+        self.log(f"Rozpoczynam próbę połączenia z {url}")
         try:
             response = self.requester.get(url)
         except:
-            print(f"Nie odnaleziono podanej strony: {url}.")
+            self.log(f"ERROR: Nie odnaleziono podanej strony: {url}.")
             return False
         if response and response.headers is not None:
             response_headers = response.headers
         else:
-            print(f"Nie udało się nawiązać połączenia: {url}")
+            self.log(f"ERROR: Nie udało się nawiązać połączenia: {url}")
             return False
         status = response.status_code
         
         if "DCSaaS" in response_headers.values() and status == 200:
-            print(f"Połączono ze sklepem Shoper: {url}")
+            self.log(f"Połączono ze sklepem Shoper: {url}")
             return True
         elif status == 200:
-            print("Nie znaleziono sklepu Shoper pod podanym adresem")
+            self.log("ERROR: Nie znaleziono sklepu Shoper pod podanym adresem")
             return False
         else:
-            print(f"Program nie mógł się połączyć z adresem: {url}. Otrzymany status HTTP: {status}")
+            self.log(f"ERROR: Program nie mógł się połączyć z adresem: {url}. Otrzymany status HTTP: {status}")
             return False

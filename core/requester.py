@@ -18,6 +18,10 @@ class Requester():
                 return response
             except:
                 print(f"Próba połączenia nie powiodła się z {url}")
+
+                if response.status_code == 403: # override for https://github.com/pwalczak418/shoper-sitemap-explorer/issues/1 - when accessis denied, try with simpler user-agent
+                    self.session.headers.update({"User-agent": "sse"})
+
                 if attempt < attempts_limit - 1:
                     print("Wykonuję kolejną próbę połączenia")
                     time.sleep(1)

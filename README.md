@@ -1,4 +1,4 @@
-# Shoper Sitemap Explorer v 1.01
+# Shoper Sitemap Explorer v 1.02
 
 This program is used to quickly download the Sitemap from stores on the Shoper.pl platform, including both the main file and sub-sitemaps.
 
@@ -27,6 +27,12 @@ Feel free to contact me through [my website](https://pwalczak.net).
 
 ## Changelog
 
-# v 1.01
+### v 1.02
+
+1. Added more logs
+2. Addressed [Issue 1](https://github.com/pwalczak418/shoper-sitemap-explorer/issues/1)
+3. Saving XML files in UTF-8 from now on for better compatibility
+
+### v 1.01
 
 Added a log box

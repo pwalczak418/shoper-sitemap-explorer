@@ -23,25 +23,29 @@ class SitemapDownloader():
         except:
             return False
         
-    def download_single_child(self, singlelink, childmap_iteration, trans, index, save_path):
+    def download_single_child(self, singlelink, childmap_iteration, trans, index, save_path, log):
         childmap_iteration = childmap_iteration.replace("GoogleSitemap/list/", "")
 
         file_name = trans + "_" + childmap_iteration + "_" + str(index) + ".xml"
         child_path = os.path.join(save_path, file_name)
 
+        log(f"Rozpoczynam próbę pobrania {file_name}")
+
         try:
             response = self.requester.get(singlelink)
             print(response.status_code)
         except:
+            log(f"ERROR: Nie udało się poprawnie pobrać pliku {file_name}, błąd {response.status_code}")
             return False
 
         try:
-            with open(child_path, "w") as file:
+            with open(child_path, "w", encoding='utf-8') as file:
                 file.write(response.text)
-                print("Plik został poprawnie zapisany")
+                log("Plik został poprawnie zapisany")
             return True
-        except:
-            print("Nie udało się poprawnie zapisać pliku")
+        except Exception as e:
+            log(f"ERROR: Nie udało się poprawnie zapisać pliku {file_name} na dysku")
+            print(f"Error {e}")
             return False
         
     def download_childsitemaps(self, url, save_path, selected_childs, log):
@@ -78,7 +82,7 @@ class SitemapDownloader():
                         link = loc_element.text
                         links.append(link)
         except Exception as e:
-            log("Wystąpił błąd z odczytaniem mapy.")
+            log("ERROR: Wystąpił błąd z odczytaniem mapy.")
             return False
 
         for index, singlelink in enumerate(links, start=1):
@@ -88,7 +92,7 @@ class SitemapDownloader():
                     trans_found = trans_pattern.search(singlelink)
                     trans = trans_found.group(0)
                     singlechildmap_iteration = singlechildmap
-                    self.download_single_child(singlelink, singlechildmap_iteration, trans, index, save_path)
+                    self.download_single_child(singlelink, singlechildmap_iteration, trans, index, save_path, log)
                     log(f"Przetworzono link {singlelink}")
                     time.sleep(1)
             

@@ -192,6 +192,7 @@ class MainFrame(wx.Frame):
                     "Informacja", wx.OK | wx.ICON_INFORMATION)
     
     def log(self, text):
+        print(text)
         self.log_text.AppendText(f"{text}" + "\n")
 
     def on_off_all(self, event):
@@ -229,7 +230,7 @@ class MainFrame(wx.Frame):
 
     def on_validate(self, url):
 
-        validator = Validator()
+        validator = Validator(self.log)
         validated_url = validator.validate_url(url)
 
         if validated_url and validator.connect(validated_url):
